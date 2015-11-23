@@ -7,7 +7,8 @@ var MyCharts = (function(){
 		errorMessages,
 		raiseError,
 		chartType,
-		startPreparingTheChart;
+		startPreparingTheChart,
+		misc;
 
 	defaultValue = {
 		chartId: "chart1",
@@ -23,6 +24,9 @@ var MyCharts = (function(){
 		"bullseye"
 	];
 
+	/*
+	*	Holds all the error messages
+	*/
 	errorMessages = {
 		ivalidId: "The provided chart ID is invalid",
 		invalidContainerId: "The provided container id is not valid",
@@ -34,8 +38,14 @@ var MyCharts = (function(){
 		console.error(message);
 	});
 
+	/**
+	*	This object holds all the validation methods
+	*/
 	validate = {
 		chartId: function(id) {
+			if(id.trim()=="") {
+				return false;
+			}
 			if(id.trim().indexOf(" ")!=-1) {
 				raiseError(errorMessages.invalId);
 				return false;
@@ -43,6 +53,9 @@ var MyCharts = (function(){
 			return true;
 		},
 		chartContainerId: function(id) {
+			if(id.trim()=="") {
+				return false;
+			}
 			if(id.trim().indexOf(" ") !== -1) {
 				raiseError(errorMessages.invalidContainerId);
 				return false;
@@ -54,6 +67,9 @@ var MyCharts = (function(){
 			return true;
 		},
 		chartType: function(type) {
+			if(type.trim()=="") {
+				return false;
+			}
 			type = type.trim().toLowerCase();
 			if(chartType.indexOf(type) === -1) {
 				raiseError(errorMessages.chartTypeNotSupported);
@@ -72,6 +88,15 @@ var MyCharts = (function(){
 		}
 	}
 
+	misc = {
+		sort: function() {
+
+		}
+	}
+
+	/**
+	*	This object is fullfilled by constructor and holds the things needed to populate the chart
+	*/
 	chartObjectParameter = {
 		chartId: defaultValue.chartId,
 		chartContainer: document.getElementById(defaultValue.chartContainerId),
@@ -83,11 +108,12 @@ var MyCharts = (function(){
 	};
 
 	startPreparingTheChart = (function() {
-		alert("x");
 		console.log(chartObjectParameter);
+
 	});
 	
 	/**
+	*	This is the constructor and it's purpose is to validate and prepare the chartObjectParameter object
 	*	arguments[0][0] = chartId
 	*	arguments[0][1] = chartContainerId
 	*	arguments[0][2] = chartType
@@ -121,11 +147,13 @@ var MyCharts = (function(){
 
 		if(validate.checkData(arguments[0][6], chartObjectParameter.dataType)) {
 			chartObjectParameter.dataSource = arguments[0][6];
+		} else {
+			return false;
 		}
-		startPreparingTheChart();
-		return false;
 	})(arguments);
 
-	
+	this.render = (function(){
+
+	});
 
 });
