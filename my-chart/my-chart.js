@@ -8,7 +8,8 @@ var MyCharts = (function(){
 		raiseError,
 		chartType,
 		startPreparingTheChart,
-		misc;
+		misc,
+		events;
 
 	defaultValue = {
 		chartId: "chart1",
@@ -33,6 +34,14 @@ var MyCharts = (function(){
 		containerNotFound: "Can't find the container in page",
 		chartTypeNotSupported: "Provided chartType not supported"
 	},
+
+	/**
+	* Holds all the supported events
+	*/
+	events = {
+		beforeRender: null,
+		afterRender: null
+	};
 
 	raiseError = (function(message){
 		console.error(message);
@@ -89,8 +98,19 @@ var MyCharts = (function(){
 	}
 
 	misc = {
-		sort: function() {
-
+		sort: function(data) {
+			var index1, index2, tempData, length;
+			length = data.length;
+			for(index1=0; index1<length; index1++) {
+				for(index2=0; index2<(length-index1-1); index2++) {
+					if(data[index2].value > data[index2+1].value) {
+						tempData = data[index2];
+						data[index2+1] = data[index2];
+						data[index2+1] = tempData;
+					}
+				}
+			}
+			return data;
 		}
 	}
 
@@ -107,11 +127,6 @@ var MyCharts = (function(){
 		dataSource: defaultValue.dataSource
 	};
 
-	startPreparingTheChart = (function() {
-		console.log(chartObjectParameter);
-
-	});
-	
 	/**
 	*	This is the constructor and it's purpose is to validate and prepare the chartObjectParameter object
 	*	arguments[0][0] = chartId
@@ -146,14 +161,30 @@ var MyCharts = (function(){
 		}
 
 		if(validate.checkData(arguments[0][6], chartObjectParameter.dataType)) {
-			chartObjectParameter.dataSource = arguments[0][6];
+			chartObjectParameter.dataSource = misc.sort(arguments[0][6]);
 		} else {
 			return false;
 		}
 	})(arguments);
+	
+	startPreparingTheChart = (function() {
+		console.log(chartObjectParameter);
 
+	});
+	this.beforeRender = (function(fn) {
+		events.beforeRender = fn;
+	});
+	this.afterRender = (function(fn) {
+		events.afterRender = fn;
+	});
 	this.render = (function(){
-
+		if(events.beforeRender) {
+			events.beforeRender();
+		}
+		startPreparingTheChart();
+		if(events.afterRender) {
+			events.afterRender();
+		}
 	});
 
 });
