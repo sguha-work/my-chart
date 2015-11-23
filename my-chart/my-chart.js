@@ -9,7 +9,8 @@ var MyCharts = (function(){
 		chartType,
 		startPreparingTheChart,
 		misc,
-		events;
+		events,
+		settings;
 
 	defaultValue = {
 		chartId: "chart1",
@@ -24,6 +25,17 @@ var MyCharts = (function(){
 	chartType = [
 		"bullseye"
 	];
+
+	/**
+	*	This object holds the basic attribute value
+	*/
+	settings = {
+		captionSpaceWidth: 5,
+		captionSpaceHeight: 5,
+		xAxisWidth: 5,
+		xAxisHeight: 5,
+		isAnimate: 0
+	};
 
 	/*
 	*	Holds all the error messages
@@ -97,6 +109,9 @@ var MyCharts = (function(){
 		}
 	}
 
+	/**
+	* This object holds all the miscellaneous methods which used throughout the program
+	*/
 	misc = {
 		sort: function(data) {
 			var index1, index2, tempData, length;
@@ -136,6 +151,7 @@ var MyCharts = (function(){
 	*	arguments[0][4] = height
 	*	arguments[0][5] = chartDataType
 	*	arguments[0][6] = dataSource
+	*	arguments[0][7] = settingsOptions
 	*/
 	constructor = (function(){
 		
@@ -165,10 +181,15 @@ var MyCharts = (function(){
 		} else {
 			return false;
 		}
+
+		if(typeof arguments[0][7] !== "undefined") {
+			settings = arguments[0][7];
+		}
 	})(arguments);
 	
 	startPreparingTheChart = (function() {
 		console.log(chartObjectParameter);
+
 
 	});
 	this.beforeRender = (function(fn) {
@@ -178,10 +199,14 @@ var MyCharts = (function(){
 		events.afterRender = fn;
 	});
 	this.render = (function(){
+		// if before render event is specified, firing the evenet
 		if(events.beforeRender) {
 			events.beforeRender();
 		}
+		
 		startPreparingTheChart();
+
+		// if after render event is specified, firing the event
 		if(events.afterRender) {
 			events.afterRender();
 		}
