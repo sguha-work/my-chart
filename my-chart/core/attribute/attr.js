@@ -1,1 +1,0 @@
-MyCharts.prototype.core.attr = {};
