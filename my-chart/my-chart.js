@@ -50,6 +50,8 @@ var MyCharts = (function(){
 	*	arguments[5] = chartData
 	*/
 	constructor = (function(){
-
+		if(){
+			
+		}
 	})(arguments);
 });
