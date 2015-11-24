@@ -37,8 +37,8 @@ var MyCharts = (function(){
 			// common attributes are applicable for all chart types
 			captionSpaceWidth: 0,
 			captionSpaceHeight: 0,
-			xAxisWidth: 0,
-			yAxisHeight: 0,
+			xAxisHeight: 0,
+			yAxisWidth: 0,
 			isAnimate: 0,
 			backgroundColor: ""	
 		},
@@ -244,8 +244,8 @@ var MyCharts = (function(){
 		if(!chartObjectParameter.attributes.xAxisHeight) {
 			chartObjectParameter.attributes.xAxisHeight = ((chartObjectParameter.width*1.67)/100);
 		}
-		if(!chartObjectParameter.attributes.yAxisHeight) {
-			chartObjectParameter.attributes.yAxisHeight = ((chartObjectParameter.height*1.67)/100);
+		if(!chartObjectParameter.attributes.yAxisWidth) {
+			chartObjectParameter.attributes.yAxisWidth = ((chartObjectParameter.height*1.67)/100);
 		}
 		if(!chartObjectParameter.attributes.captionSpaceWidth) {
 			chartObjectParameter.attributes.captionSpaceWidth = ((chartObjectParameter.width*1.67)/100);
