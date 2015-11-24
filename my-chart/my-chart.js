@@ -10,7 +10,7 @@ var MyCharts = (function(){
 		startPreparingTheChart,
 		misc,
 		events,
-		settings;
+		attributes;
 
 	defaultValue = {
 		chartId: "chart1",
@@ -23,18 +23,30 @@ var MyCharts = (function(){
 	};
 	
 	chartType = [
-		"bullseye"
+		"bullseye",
+		"triangle"
 	];
 
 	/**
 	*	This object holds the basic attribute value
 	*/
-	settings = {
-		captionSpaceWidth: 5,
-		captionSpaceHeight: 5,
-		xAxisWidth: 5,
-		xAxisHeight: 5,
-		isAnimate: 0
+	attributes = {
+		common: {
+			captionSpaceWidth: 5,
+			captionSpaceHeight: 5,
+			xAxisWidth: 5,
+			xAxisHeight: 5,
+			isAnimate: 0	
+		},
+		chartSpecific: {
+			bullseye: {
+				minRadius: 5
+			},
+			triangle: {
+
+			}
+		}
+		
 	};
 
 	/*
@@ -139,7 +151,8 @@ var MyCharts = (function(){
 		width: defaultValue.width,
 		height: defaultValue.height,
 		dataType: defaultValue.dataType,
-		dataSource: defaultValue.dataSource
+		dataSource: defaultValue.dataSource,
+		attributes: {}
 	};
 
 	/**
@@ -151,10 +164,11 @@ var MyCharts = (function(){
 	*	arguments[0][4] = height
 	*	arguments[0][5] = chartDataType
 	*	arguments[0][6] = dataSource
-	*	arguments[0][7] = settingsOptions
+	*	arguments[0][7] = attributesOptions
 	*/
 	constructor = (function(){
-		
+		var chartSpecificAttributes,
+			index;
 		if(validate.chartId(arguments[0][0])){
 			chartObjectParameter.chartId = arguments[0][0].trim();
 		}
@@ -183,7 +197,14 @@ var MyCharts = (function(){
 		}
 
 		if(typeof arguments[0][7] !== "undefined") {
-			settings = arguments[0][7];
+			chartObjectParameter.attributes = arguments[0][7];
+		} else { 
+			// merging common attributes and chart specific attributes to chartObjectParameter
+			chartObjectParameter.attributes = attributes.common;
+			chartSpecificAttributes = Object.keys(attributes.chartSpecific[chartObjectParameter.chartType]);
+			for(index in chartSpecificAttributes) {
+				chartObjectParameter.attributes[chartSpecificAttributes[index]] = attributes.chartSpecific[chartObjectParameter.chartType][chartSpecificAttributes[index]];
+			}
 		}
 	})(arguments);
 	
