@@ -10,7 +10,8 @@ var MyCharts = (function(){
 		startPreparingTheChart,
 		misc,
 		events,
-		attributes;
+		attributes,
+		settingUpAttributesNotSpecified;
 
 	defaultValue = {
 		chartId: "chart1",
@@ -32,15 +33,17 @@ var MyCharts = (function(){
 	*/
 	attributes = {
 		common: {
-			captionSpaceWidth: 5,
-			captionSpaceHeight: 5,
-			xAxisWidth: 5,
-			xAxisHeight: 5,
+			// common attributes are applicable for all chart types
+			captionSpaceWidth: 0,
+			captionSpaceHeight: 0,
+			xAxisWidth: 0,
+			xAxisHeight: 0,
 			isAnimate: 0	
 		},
 		chartSpecific: {
+			// chart specific attributes are only for specific charts
 			bullseye: {
-				minRadius: 5
+				minRadius: 0
 			},
 			triangle: {
 
@@ -168,6 +171,7 @@ var MyCharts = (function(){
 	*/
 	constructor = (function(){
 		var chartSpecificAttributes,
+			commonAttributes,
 			index;
 		if(validate.chartId(arguments[0][0])){
 			chartObjectParameter.chartId = arguments[0][0].trim();
@@ -198,6 +202,21 @@ var MyCharts = (function(){
 
 		if(typeof arguments[0][7] !== "undefined") {
 			chartObjectParameter.attributes = arguments[0][7];
+
+			//chartObjectParameter.attributes = attributes.common;
+			commonAttributes = attributes.common;
+			for(index in commonAttributes) {
+				if(typeof chartObjectParameter.attributes[commonAttributes[index]] === "undefined") {
+					chartObjectParameter.attributes[commonAttributes[index]] = attributes.chartSpecific[chartObjectParameter.chartType][chartSpecificAttributes[index]];
+				}
+			}
+
+			chartSpecificAttributes = Object.keys(attributes.chartSpecific[chartObjectParameter.chartType]);
+			for(index in chartSpecificAttributes) {
+				if(typeof chartObjectParameter.attributes[chartSpecificAttributes[index]] === "undefined") {
+					chartObjectParameter.attributes[chartSpecificAttributes[index]] = attributes.chartSpecific[chartObjectParameter.chartType][chartSpecificAttributes[index]];
+				}
+			}
 		} else { 
 			// merging common attributes and chart specific attributes to chartObjectParameter
 			chartObjectParameter.attributes = attributes.common;
@@ -208,9 +227,13 @@ var MyCharts = (function(){
 		}
 	})(arguments);
 	
+	settingUpAttributesNotSpecified = (function(){
+
+	});
+
 	startPreparingTheChart = (function() {
 		console.log(chartObjectParameter);
-
+		settingUpAttributesNotSpecified();
 
 	});
 	this.beforeRender = (function(fn) {
