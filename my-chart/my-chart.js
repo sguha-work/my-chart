@@ -184,7 +184,9 @@ var MyCharts = (function(){
 	constructor = (function(){
 		var chartSpecificAttributes,
 			commonAttributes,
-			index;
+			index,
+			commonEvents,
+			chartSpecificEvents;
 		if(validate.chartId(arguments[0][0])){
 			chartObjectParameter.chartId = arguments[0][0].trim();
 		}
@@ -214,8 +216,6 @@ var MyCharts = (function(){
 
 		if(typeof arguments[0][7] !== "undefined") {
 			chartObjectParameter.attributes = arguments[0][7];
-
-			//chartObjectParameter.attributes = attributes.common;
 			commonAttributes = attributes.common;
 			for(index in commonAttributes) {
 				if(typeof chartObjectParameter.attributes[commonAttributes[index]] === "undefined") {
@@ -237,6 +237,31 @@ var MyCharts = (function(){
 				chartObjectParameter.attributes[chartSpecificAttributes[index]] = attributes.chartSpecific[chartObjectParameter.chartType][chartSpecificAttributes[index]];
 			}
 		}
+
+		if(typeof arguments[0][8] !== "undefined") {
+			chartObjectParameter.events = arguments[0][8];
+			commonEvents = events.common;
+			for(index in commonEvents) {
+				if(typeof chartObjectParameter.events[commonEvents[index]] === "undefined") {
+					chartObjectParameter.events[commonEvents[index]] = events.chartSpecific[chartObjectParameter.chartType][chartSpecificAttributes[index]];
+				}
+			}
+
+			chartSpecificEvents = Object.keys(events.chartSpecific[chartObjectParameter.chartType]);
+			for(index in chartSpecificEvents) {
+				if(typeof chartObjectParameter.events[chartSpecificEvents[index]] === "undefined") {
+					chartObjectParameter.events[chartSpecificEvents[index]] = events.chartSpecific[chartObjectParameter.chartType][chartSpecificEvents[index]];
+				}
+			}
+		} else { 
+			// merging common events and chart specific events to chartObjectParameter
+			chartObjectParameter.events = events.common;
+			chartSpecificEvents = Object.keys(events.chartSpecific[chartObjectParameter.chartType]);
+			for(index in chartSpecificEvents) {
+				chartObjectParameter.events[chartSpecificEvents[index]] = events.chartSpecific[chartObjectParameter.chartType][chartSpecificEvents[index]];
+			}
+		}
+
 	})(arguments);
 	
 	setupChartContainer = (function() {console.log(chartObjectParameter.chartContainer);
