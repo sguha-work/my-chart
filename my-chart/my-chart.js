@@ -300,15 +300,15 @@ var MyCharts = (function(){
 		console.log(chartObjectParameter);
 		settingUpCommonAttributesNotSpecified();
 		// if before render event is specified, firing the evenet
-		if(events.beforeRender) {
-			events.beforeRender();
+		if(chartObjectParameter.events.beforeRender) {
+			chartObjectParameter.events.beforeRender();
 		}
 	});
 	this.beforeRender = (function(fn) {
-		events.beforeRender = fn;
+		chartObjectParameter.events.beforeRender = fn;
 	});
 	this.afterRender = (function(fn) {
-		events.afterRender = fn;
+		chartObjectParameter.events.afterRender = fn;
 	});
 	this.render = (function(){
 		if(!setupChartContainer()) {
@@ -318,8 +318,8 @@ var MyCharts = (function(){
 		startPreparingTheChart();
 
 		// if after render event is specified, firing the event
-		if(events.afterRender) {
-			events.afterRender();
+		if(chartObjectParameter.events.afterRender) {
+			chartObjectParameter.events.afterRender();
 		}
 	});
 
