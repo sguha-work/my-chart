@@ -58,7 +58,7 @@ var MyCharts = (function(){
 	*	Holds all the error messages
 	*/
 	errorMessages = {
-		ivalidId: "The provided chart ID is invalid",
+		invalidId: "The provided chart ID is invalid",
 		invalidContainerId: "The provided container id is not valid",
 		containerNotFound: "Can't find the container in page",
 		chartTypeNotSupported: "Provided chartType not supported"
