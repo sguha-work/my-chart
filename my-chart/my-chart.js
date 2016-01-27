@@ -263,7 +263,11 @@ var MyCharts = (function(){
 		}
 
 	})(arguments);
-	
+		
+	/**
+	* This function checks wheather the specified chart container exists or not if exists then collect the object
+	* else it raises error
+	*/
 	setupChartContainer = (function() {console.log(chartObjectParameter.chartContainer);
 		var tempObject = document.getElementById(chartObjectParameter.chartContainer);
 		if(!tempObject) {
@@ -304,12 +308,7 @@ var MyCharts = (function(){
 			chartObjectParameter.events.beforeRender();
 		}
 	});
-	this.beforeRender = (function(fn) {
-		chartObjectParameter.events.beforeRender = fn;
-	});
-	this.afterRender = (function(fn) {
-		chartObjectParameter.events.afterRender = fn;
-	});
+
 	this.render = (function(){
 		if(!setupChartContainer()) {
 			return false;
@@ -321,6 +320,17 @@ var MyCharts = (function(){
 		if(chartObjectParameter.events.afterRender) {
 			chartObjectParameter.events.afterRender();
 		}
+	});
+
+	// Following section will holds all the event methods, this will be called by the user if they specify a function 
+	// to be fired on an event
+
+	this.beforeRender = (function(fn) {
+		chartObjectParameter.events.beforeRender = fn;
+	});
+
+	this.afterRender = (function(fn) {
+		chartObjectParameter.events.afterRender = fn;
 	});
 
 });
